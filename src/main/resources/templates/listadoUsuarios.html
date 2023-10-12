@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layaout"
+      layout:decorate="~{layout}">
+    <body layout:fragment="body">
+        <div class="container">
+            <h1 class="mt-5">Lista de Usuarios</h1>
+
+            <form th:action="@{/Usuario/listado}" method="post" th:object="${usuariobusqueda}">
+                <div class ="row">
+                    <div class="col-md-2">
+                        <div class="input-group mb-1">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="Nombre" id="txtNombre" name="nombre" th:field="*{nombre}"/>
+                        </div>
+                        <label id="lblNombre"></label>
+                    </div>
+                    <div class ="col-md-2">
+                        <div class="input-group mb-1">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="ApellidoMaterno" id="txtApellidoMaterno"name="apellidomaterno" th:field="*{apellidomaterno}"/>
+                        </div>
+                        <label id="lblNombre"></label>
+                    </div>
+
+                    <div class ="col-md-2">
+                        <div class="input-group mb-1">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control" placeholder="apellidopaterno" id="txtNombre" name="apellidopaterno" th:field="*{apellidopaterno}"/>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-primary">BUSCAR</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="text-center">
+                <a th:href="@{/Usuario/form/{idusuario}(idusuario=0)}" class="btn btn-success">Agregar</a>
+            </div>
+        </div>
+        <div class="tabla-container">
+            <table id="myTable" class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th scope="col">IdAlumno</th>
+                        <th scope="col">userName</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Pasword</th>
+                        <th scope="col">Sexo</th>
+                        <th scope="col">Fecha de Nacimiento</th>
+                        <th scope="col">Telefono</th>
+                        <th scope="col">Celular</th>
+                        <th scope="col">Curp</th>
+                        <th scope="col">Idrol</th>
+                        <th scope="col">Imagen</th>
+                        <th></th> <!-- Encabezado para los botones de Acciones -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Itera sobre los usuarios y crea una fila para cada uno -->
+                    <tr th:each="usuario: ${usuarios}">
+                        <td><a th:href="@{/Usuario/form/{idusuario}(idusuario=${usuario.idusuario})}" class="btn btn-warning">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a></td>
+                        <td>
+                            <div th:if="${usuario.status == 'N'}" class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" th:id="${usuario.idusuario}" onchange="ChangeStatus(this)">
+                            </div>
+                            <div th:unless="${usuario.status == 'N'}" class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" th:id="${usuario.idusuario}" onchange="ChangeStatus(this)" checked>
+                            </div>
+                        </td>
+                        <td th:text="${usuario.idusuario}"></td>
+                        <td th:text="${usuario.getusername()}"></td>
+                        <td th:text="${usuario.nombre + ' ' + usuario.apellidopaterno + ' ' + usuario.apellidomaterno}"></td>
+                        <td th:text="${usuario.email}"></td>
+                        <td th:text="${usuario.getPassword()}"></td>
+                        <td th:text="${usuario.sexo}"></td>
+                        <td th:text="${usuario.fechanacimiento}"></td>  
+
+                        <td th:text="${usuario.telefono}"></td>
+                        <td th:text="${usuario.celular}"></td>
+                        <td th:text="${usuario.curp}"></td>
+                        <td th:text="${usuario.getRol().getIdrol()}"></td>
+                        <!--                        <td><img th:src="'data:image/png;base64,'+ ${usuario.imagen}" style="width: 100px; height: 100px;"/><td>-->
+
+
+
+                        <td>
+                            <img th:if="${usuario.imagen != null}" th:src="'data:image/png;base64,' + ${usuario.imagen}" style="width: 100px; height: 100px;" />
+                            <img th:unless="${usuario.imagen != null}" src="/imagen/default.png" style="width: 100px; height: 100px;"/>
+                        </td>
+
+
+
+
+                        <!--<td>
+                            <img th:if="${usuario.imagen != null}" th:src="'data:image/png;base64,' + ${usuario.imagen}" />
+                            <img th:if="${usuario.imagen == null}" th:src="@{/imagen/default.png}" />
+                        </td>-->
+
+
+
+
+
+
+                        <td>
+                            <form th:action="@{'/Usuario/eliminar/' + ${usuario.idusuario}}" method="post">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <a th:href="@{/Usuario/Tipoinmueble}" class="btn btn-success">Ver Inmuebles</a>
+            <a th:href="@{/Usuario/Servicio}" class="btn btn-success">Ver servicios</a>
+        </div>
+    </body>
+</html>
+
+<script>
+    function ChangeStatus(e) {
+        var status = e.checked;
+        var idusuario = e.id;
+        $.ajax({
+            type: "GET",
+            url: "/Usuario/ChangeStatus",
+            dataType: "json",
+            data: {idusuario: idusuario, status: status},
+            success: {},
+            error: {
+
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>     

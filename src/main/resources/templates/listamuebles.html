@@ -1,0 +1,76 @@
+
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layaout"
+      layout:decorate="~{layout}">
+    <body layout:fragment="body">
+        <div class="container">
+            <h1 class="mt-5">Lista de Inmuebles</h1>
+        </div>
+        <div class="text-center">
+            <a th:href="@{/Usuario/formulario/{idtipoinmueble}(idtipoinmueble=0)}" class="btn btn-success">Agregar</a>
+        </div>
+
+        <div class="tabla-container">
+            <table class="table">
+                <thead class="table-dark">
+                    <tr> 
+                        <th></th>
+                        <th scope="col">Nombre</th>
+                        <th></th> 
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr th:each="Tipoinmueble: ${Tipoinmuebles}">
+                        
+                        <td th:text="${Tipoinmueble.nombre}"></td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
+
+<!--<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <body layout:fragment="body">
+        <div class="container">
+            <h1 class="mt-5">Lista de Inmuebles</h1>
+        </div>
+        <div class="text-center">
+            <a th:href="@{/Usuario/formulario/{idtipoinmueble}(idtipoinmueble=0)}" class="btn btn-success">Agregar</a>
+        </div>
+
+        <div class="tabla-container">
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th></th>
+                        <th scope="col">Nombre</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="tipoinmueble : ${tipoinmuebles}">
+                        <td th:text="${tipoinmueble.nombre}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>-->
+
+
+
+<!--                        <td>
+                            <form th:action="@{/Usuario/formulario/{idtipoinmueble}(idtipoinmueble=${Tipoinmueble.idtipoinmueble})}" method="post">
+                                <input type="hidden" name="_method" value="put" />
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </form>
+
+                        </td>-->

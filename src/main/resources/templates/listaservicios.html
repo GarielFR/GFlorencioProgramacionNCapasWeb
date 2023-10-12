@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layaout"
+      layout:decorate="~{layout}">
+    <body layout:fragment="body">
+        <div class="container">
+            <h1 class="mt-5">Lista de servicios</h1>
+        </div>
+        <div class="tabla-container">
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th></th>
+                        <th scope="col">Nombre</th>
+                        <th></th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="servicio: ${servicios}">
+                        <td th:text="${servicio.nombre}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
